@@ -12,30 +12,29 @@ class enter_book{
 public void enter_details(){
     System.out.println("enter the bookid");
     book_Id=scn.nextInt();
+    scn.nextLine();
 
     System.out.println("Enter the name of the author ");
-    book_author=scn.next();
+    book_author=scn.nextLine();
 
     System.out.println("enter the name of the book");
-    book_name=scn.next();
+    book_name=scn.nextLine();
 
 
 }}
 class head  {
     Scanner scn=new Scanner(System.in);
     enter_book ent=new enter_book();
-    Map<Integer,String[]> books=new HashMap<>();
 
-    public  void  add_book(){
-        books.put(101, new String[]{"Author A", "Book A"});
-        books.put(102, new String[]{"Author B", "Book B"});
-        books.put(103, new String[]{"Author C", "Book C"});
-        books.put(104, new String[]{"Author D", "Book D"});
-        books.put(105, new String[]{"Author E", "Book E"});
+
+
+    public  void  add_book(Map<Integer, String[]> books){
+
         System.out.println("Enter the number of books to be entered");
 
 
         int repeat=scn.nextInt();
+        scn.nextLine();
         for (int i=0;i<repeat;i++){
             ent.enter_details();
             books.put(ent.book_Id,new String[]{ent.book_author,ent.book_name});
@@ -43,17 +42,22 @@ class head  {
     }
 
 
-    public void display_book(Map<Integer,String[]>  books){
-        for (Map.Entry<Integer,String[]> entry : books.entrySet() ){
-            int bookid= entry.getKey();
-            String [] bookdetails=entry.getValue();
-            System.out.println("Book ID: "+bookid+"\nBook Author"+bookdetails[0]+"\nBook Name"+bookdetails[1]);
-           System.out.println("-----------------------------\n");
+    public void display_book(Map<Integer, String[]> books) {
+        if (books.isEmpty()) {
+            System.out.println("No books available.");
+            return;
         }
 
-
+        for (Map.Entry<Integer, String[]> entry : books.entrySet()) {
+            int bookid = entry.getKey();
+            String[] bookdetails = entry.getValue();
+            System.out.println("Book ID: " + bookid);
+            System.out.println("Book Author: " + bookdetails[0]);
+            System.out.println("Book Name: " + bookdetails[1]);
+            System.out.println("-----------------------------");
+        }
     }
-    public void remove_book(){
+    public void remove_book(Map<Integer, String[]> books){
         System.out.println("Enter the bookid to remove the book");
         int rnum=scn.nextInt();
         if (books.containsKey(rnum)){
@@ -65,13 +69,14 @@ class head  {
             System.out.println("After the action taken by the user the reminibg collection:");
             display_book(books);
     }
-    public void change_entries(){
+    public void change_entries(Map<Integer, String[]> books){
         System.out.println("1. Changing the book Id");
         System.out.println("2. Changing the book author");
         System.out.println("3. Changing the bookname");
-        System.out.println("4.Sorting the books in the order of book ID");
+
         System.out.println("Enter choice that you want to make ");
         int enter=scn.nextInt();
+        scn.nextLine();
 
         switch(enter){
             case 1:
@@ -94,6 +99,7 @@ class head  {
             case 2 :
                 System.out.println("Enter the bookid of the book whose author's name you want to change");
                 int index=scn.nextInt();
+                scn.nextLine();
                 if(books.containsKey(index)==true){
                     String [] values=books.get(index);
                     String old_value=values[0];
@@ -112,6 +118,7 @@ class head  {
             case 3:
                 System.out.println("Enter the bookId to change the name ");
                 int oldindex=scn.nextInt();
+                scn.nextLine();
                 if(books.containsKey(oldindex)==true){
                     String [] values=books.get(oldindex);
                     System.out.println("Enter the new bookname");
@@ -126,13 +133,12 @@ class head  {
                     System.out.println("The bookid you gave does not exist");
                 }
                 break;
-            case 4:
-                sort_byID();
+
 
         }
 
     }
-    public void sort_byID(){
+    public void sort_byID(Map<Integer, String[]> books){
         int [] values= new int [books.size()];
         int i=0;
         Map<Integer,String[]> sorted_books=new LinkedHashMap<>();
@@ -141,7 +147,22 @@ class head  {
             values[i]=entry.getKey();
             i++;
         }
+        System.out.println("Before sorting");
+        for (int  value:values){
+            System.out.println(value+" ");
+        }
+
+
         sorting(values);
+
+
+        System.out.println("\nAftersorting");
+
+        for (int  value:values){
+            System.out.println(value+" ");
+        }
+
+
         for (int l =0;l<values.length;l++){
             sorted_books.put(values[l],books.get(values[l]));
 
@@ -151,6 +172,7 @@ class head  {
     }
 
     public void sorting( int array[]){
+
         int mainlen=array.length;
         int [] leftside=new int[mainlen/2];
         int [] rightside =new int[mainlen-leftside.length];
@@ -201,7 +223,7 @@ class head  {
 
 }
 class student extends head{
-    public void fetch_books_byid(){
+    public void fetch_books_byid(Map<Integer, String[]> books){
         System.out.println("enter your choice ");
 
         System.out.println("1.Search book by bookID");
@@ -209,10 +231,12 @@ class student extends head{
         System.out.println("3.Search book by book name");
 
         int choice =scn.nextInt();
+        scn.nextLine();
         switch(choice){
             case 1 :
                 System.out.println("Enter the book id you want to fetch ");
                 int index=scn.nextInt();
+                scn.nextLine();
                 if (books.containsKey(index)==true){
                     books.get(index);
 
@@ -280,9 +304,10 @@ class student extends head{
 
 
     }
-    public void issue_book(){
+    public void issue_book(Map<Integer, String[]> books){
         System.out.println("Enter the no of books to be issued");
         int n=scn.nextInt();
+        scn.nextLine();
         HashMap<Integer,String[]> collection=new HashMap<>();
         for (int i=0;i<n;i++){System.out.println("Enter the book id you want to fetch ");
             int index=scn.nextInt();
@@ -311,6 +336,13 @@ class student extends head{
 public class library {
 
     public static void main(String[] args) {
+        Map<Integer,String[]> books=new HashMap<>();
+        books.put(101, new String[]{"Author A", "Book A"});
+        books.put(102, new String[]{"Author B", "Book B"});
+        books.put(103, new String[]{"Author C", "Book C"});
+        books.put(104, new String[]{"Author D", "Book D"});
+        books.put(105, new String[]{"Author E", "Book E"});
+
         enter_book entb=new enter_book();
         head hd=new head();
         Scanner scn=new Scanner(System.in);
@@ -319,23 +351,34 @@ public class library {
         System.out.println("2. Student");
         System.out.println("3. Employee");
         int choice=scn.nextInt();
+        scn.nextLine();
+
+
         switch(choice){
             case 1:
-                hd.add_book();
-                hd.display_book(hd.books);
-                System.out.println("Enter you choice");
-                System.out.println("1. To remove books");
-                System.out.println("2.To make changes to the collection ");
-                int choiceint=scn.nextInt();
-                if (choiceint==1){
-                    hd.remove_book();
+                System.out.println("Enter the operation youw ant to do: ");
+                System.out.println("1.Add books ");
+                System.out.println("2.Remove books");
+                System.out.println("3.Change details of books");
+                System.out.println("4.Sorting by bookID");
+                int select1=scn.nextInt();
+                scn.nextLine();
+                switch (select1){
+                    case 1:
+                        hd.add_book(books);
+                        System.out.println("The given details were add");
+                break;
+                    case 2:
+                        hd.remove_book(books);
+                break;
+                    case 3:
+                        hd.change_entries(books);
+                        break;
+                    case 4:
+                        hd.sort_byID(books);
+                        break;
 
                 }
-                else{
-                    hd.change_entries();
-                }
-                break;
-                //case 2
 
 
         }

@@ -1,5 +1,15 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.Scanner;
+import java.util.Arrays;
 
-import java.util.*;
+
+import static java.time.Month.*;
 
 class enter_book{
 
@@ -206,8 +216,6 @@ class head  {
 
             }
             k++;
-
-
         }
         while(i<leftarray.length){
             array[k]=leftarray[i];
@@ -223,7 +231,8 @@ class head  {
 
 }
 class student extends head{
-    public void fetch_books_byid(Map<Integer, String[]> books){
+    private LocalDate return_date;
+    public void fetch_books(Map<Integer, String[]> books){
         System.out.println("enter your choice ");
 
         System.out.println("1.Search book by bookID");
@@ -231,6 +240,7 @@ class student extends head{
         System.out.println("3.Search book by book name");
 
         int choice =scn.nextInt();
+
         scn.nextLine();
         switch(choice){
             case 1 :
@@ -304,12 +314,14 @@ class student extends head{
 
 
     }
-    public void issue_book(Map<Integer, String[]> books){
+    public void issue_book(Map<Integer, String[]> books,Map<Integer,String> studentinfo){
         System.out.println("Enter the no of books to be issued");
         int n=scn.nextInt();
         scn.nextLine();
+        int mainlen=books.size();
+
         HashMap<Integer,String[]> collection=new HashMap<>();
-        for (int i=0;i<n;i++){System.out.println("Enter the book id you want to fetch ");
+        for (int i=0;i<n;i++){System.out.println("Enter the book id you want to issue ");
             int index=scn.nextInt();
 
 
@@ -328,23 +340,50 @@ class student extends head{
 
         display_book(books);
         System.out.println(" The selected books");
-
         display_book(collection);
-    }}
+        LocalDateTime issue_date=LocalDateTime.now();
+        System.out.println("The date of issue: "+ issue_date);
+        LocalDateTime return_date=issue_date.plusDays(30);
+        System.out.println("The maximum return date is : "+ return_date);
+        if(books.size()==mainlen){
+            System.out.println("You have not issued a book");
+
+        }
+        else{
+            System.out.println("You issued the following no of books: "+n);
+            System.out.println("Enter you personal details as follows: 1. Registor number 2. Your name");
+            int regisno=scn.nextInt();
+            scn.nextLine();
+            String name=scn.nextLine();
+
+            studentinfo.put(regisno,name);
+
+        }
+
+
+
+    }
+
+}
 
 
 public class library {
 
     public static void main(String[] args) {
         Map<Integer,String[]> books=new HashMap<>();
-        books.put(101, new String[]{"Author A", "Book A"});
+        Map<Integer,String> studentinfo=new LinkedHashMap<>();
+
+
         books.put(102, new String[]{"Author B", "Book B"});
         books.put(103, new String[]{"Author C", "Book C"});
         books.put(104, new String[]{"Author D", "Book D"});
         books.put(105, new String[]{"Author E", "Book E"});
+        books.put(101, new String[]{"Author A", "Book A"});
 
         enter_book entb=new enter_book();
         head hd=new head();
+        student std=new student();
+
         Scanner scn=new Scanner(System.in);
         System.out.println("Enter your choice For ex 1 2 3 4.......... ");
         System.out.println("1.Head");
@@ -367,10 +406,13 @@ public class library {
                     case 1:
                         hd.add_book(books);
                         System.out.println("The given details were add");
-                break;
+                        break;
+
                     case 2:
                         hd.remove_book(books);
-                break;
+                        break;
+
+
                     case 3:
                         hd.change_entries(books);
                         break;
@@ -378,7 +420,34 @@ public class library {
                         hd.sort_byID(books);
                         break;
 
+
                 }
+                break;
+            case 2:
+
+                System.out.println("Enter you choice:  ");
+                System.out.println("1.Fetch A book's info");
+                System.out.println("2. Issue a book: ");
+                System.out.println("3. Sort by Book id");
+
+
+                int num=scn.nextInt();
+                scn.nextLine();
+                switch(num) {
+                    case 1:
+                        std.fetch_books(books);
+                        break;
+                    case 2:
+                        std.issue_book(books,studentinfo);
+                        break;
+
+
+                    case 3:
+                        std.sort_byID(books);
+                        break;
+                }
+
+
 
 
         }

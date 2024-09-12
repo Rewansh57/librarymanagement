@@ -20,15 +20,26 @@ class enter_book{
 
 
 public void enter_details(){
+    try{
+
     System.out.println("enter the bookid");
     book_Id=scn.nextInt();
     scn.nextLine();
+    if (book_Id<0){
+    throw new MyExceptions();
+    }
+        System.out.println("Enter the name of the author ");
+        book_author=scn.nextLine();
 
-    System.out.println("Enter the name of the author ");
-    book_author=scn.nextLine();
+        System.out.println("enter the name of the book");
+        book_name=scn.nextLine();
+    }
+    catch(MyExceptions mex){
+        mex.Wrong_number();
+    }
 
-    System.out.println("enter the name of the book");
-    book_name=scn.nextLine();
+
+
 
 
 }}
@@ -39,16 +50,28 @@ class head  {
 
 
     public  void  add_book(Map<Integer, String[]> books){
-
         System.out.println("Enter the number of books to be entered");
-
-
         int repeat=scn.nextInt();
         scn.nextLine();
-        for (int i=0;i<repeat;i++){
-            ent.enter_details();
-            books.put(ent.book_Id,new String[]{ent.book_author,ent.book_name});
-        }
+        try{
+            if (repeat<0){
+                throw new MyExceptions();
+
+            }
+
+            for (int i=0;i<repeat;i++){
+                ent.enter_details();
+                books.put(ent.book_Id,new String[]{ent.book_author,ent.book_name});
+
+            }
+            System.out.println("The changes are done");
+
+        display_book(books);}
+            catch(MyExceptions mex){
+                mex.Wrong_number();
+            }
+
+
     }
 
 
@@ -92,6 +115,10 @@ class head  {
             case 1:
                 System.out.println("Enter the bookid you want to change");
                 int oldkey=scn.nextInt();
+                try{ if (oldkey<0){
+                    throw new MyExceptions();
+
+                }
 
                 if (books.containsKey(oldkey)==true){
                     System.out.println("Enter the bookid you want to add");
@@ -104,6 +131,10 @@ class head  {
                 }
                 else{
                     System.out.println("The Id you entered is not present ");
+                }}
+                catch (MyExceptions mex){
+                    mex.Wrong_number();
+
                 }
                 break;
             case 2 :
@@ -240,8 +271,11 @@ class student extends head{
         System.out.println("3.Search book by book name");
 
         int choice =scn.nextInt();
-
         scn.nextLine();
+        try{
+            if(choice<0){
+                throw new MyExceptions();
+            }
         switch(choice){
             case 1 :
                 System.out.println("Enter the book id you want to fetch ");
@@ -307,17 +341,26 @@ class student extends head{
 
                 }
 
-              }
+              }}
 
 
 
 
 
-    }
+
+    catch(MyExceptions mex){
+            mex.Wrong_number();
+
+    }}
     public void issue_book(Map<Integer, String[]> books,Map<Integer,String> studentinfo){
         System.out.println("Enter the no of books to be issued");
         int n=scn.nextInt();
         scn.nextLine();
+        try{
+            if (n<0){
+                throw new MyExceptions();
+            }
+
         int mainlen=books.size();
 
         HashMap<Integer,String[]> collection=new HashMap<>();
@@ -358,6 +401,9 @@ class student extends head{
 
             studentinfo.put(regisno,name);
 
+        }}
+        catch(MyExceptions mex){
+            mex.Wrong_number();
         }
 
 
@@ -391,6 +437,9 @@ public class library {
         System.out.println("3. Employee");
         int choice=scn.nextInt();
         scn.nextLine();
+        try{ if (choice<0){
+            throw new MyExceptions();
+        }
 
 
         switch(choice){
@@ -405,7 +454,7 @@ public class library {
                 switch (select1){
                     case 1:
                         hd.add_book(books);
-                        System.out.println("The given details were add");
+
                         break;
 
                     case 2:
@@ -450,6 +499,9 @@ public class library {
 
 
 
+        }}
+        catch(MyExceptions mex){
+            mex.Wrong_number();
         }
 
 
